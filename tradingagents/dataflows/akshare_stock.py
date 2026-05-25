@@ -46,6 +46,13 @@ def _is_ashare(symbol: str) -> bool:
     return clean.isdigit() and len(clean) == 6
 
 
+def _ashare_prefix(clean: str) -> str:
+    """Map A-share code to Sina prefix (sh/sz)."""
+    if clean.startswith(("6", "9")):
+        return "sh"
+    return "sz"
+
+
 def _is_hk_stock(symbol: str) -> bool:
     """Detect if symbol is a Hong Kong stock (5-digit code)."""
     clean = symbol.split(".")[0]
@@ -122,8 +129,14 @@ def get_stock(
                 adjust="qfq",
             )
             df = _normalize_ashare_df(df)
-        except Exception as e:
-            raise RuntimeError(f"AKShare failed for A-share {symbol}: {e}") from e
+        except Exception:
+            # Fallback to Sina Finance when East Money is unreachable
+            prefix = _ashare_prefix(clean)
+            try:
+                df = ak.stock_zh_a_daily(symbol=f"{prefix}{clean}", adjust="qfq", start_date=start, end_date=end)
+            except Exception as e2:
+                raise RuntimeError(f"AKShare failed for A-share {symbol} (both East Money and Sina): {e2}") from e2
+            df = _normalize_us_df(df)  # Sina uses English column names same as US format
     elif _is_hk_stock(clean):
         try:
             df = ak.stock_hk_hist(symbol=clean, period="daily", start_date=start, end_date=end, adjust="qfq")
@@ -228,8 +241,13 @@ def get_indicator(
         try:
             raw = ak.stock_zh_a_hist(symbol=clean, period="daily", start_date=start, end_date=end, adjust="qfq")
             raw = _normalize_ashare_df(raw)
-        except Exception as e:
-            raise RuntimeError(f"AKShare indicator data fetch failed for {symbol}: {e}") from e
+        except Exception:
+            prefix = _ashare_prefix(clean)
+            try:
+                raw = ak.stock_zh_a_daily(symbol=f"{prefix}{clean}", adjust="qfq", start_date=start, end_date=end)
+            except Exception as e2:
+                raise RuntimeError(f"AKShare indicator data fetch failed for {symbol}: {e2}") from e2
+            raw = _normalize_us_df(raw)
     else:
         raise AKShareUnsupportedError(f"AKShare indicators only support A-share stocks, got '{symbol}'")
 
