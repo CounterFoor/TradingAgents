@@ -5,6 +5,7 @@ import pandas as pd
 import yfinance as yf
 import os
 from .stockstats_utils import StockstatsUtils, _clean_dataframe, yf_retry, load_ohlcv, filter_financials_by_date
+from yfinance.exceptions import YFRateLimitError
 
 def get_YFin_data_online(
     symbol: Annotated[str, "ticker symbol of the company"],
@@ -201,6 +202,11 @@ def get_stock_stats_indicators_window(
             )
             ind_string += f"{curr_date_dt.strftime('%Y-%m-%d')}: {indicator_value}\n"
             curr_date_dt = curr_date_dt - relativedelta(days=1)
+
+    # If no valid data was produced, trigger vendor fallback
+    has_valid = any(": " in line and not line.endswith(": \n") and not line.endswith(": ") for line in ind_string.split("\n") if line.strip())
+    if not has_valid:
+        raise YFRateLimitError(f"No valid {indicator} data for {symbol} — triggering fallback")
 
     result_str = (
         f"## {indicator} values from {before.strftime('%Y-%m-%d')} to {end_date}:\n\n"

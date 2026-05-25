@@ -93,10 +93,10 @@ DEFAULT_CONFIG = _apply_env_overrides({
     # Data vendor configuration
     # Category-level configuration (default for all tools in category)
     "data_vendors": {
-        "core_stock_apis": "yfinance",       # Options: alpha_vantage, yfinance, akshare
-        "technical_indicators": "yfinance",  # Options: alpha_vantage, yfinance, akshare
-        "fundamental_data": "akshare, yfinance",  # Options: alpha_vantage, yfinance, akshare
-        "news_data": "yfinance",             # Options: alpha_vantage, yfinance, akshare
+        "core_stock_apis": "yfinance",           # Options: alpha_vantage, yfinance, akshare
+        "technical_indicators": "akshare, yfinance",  # Options: alpha_vantage, yfinance, akshare
+        "fundamental_data": "akshare, yfinance",      # Options: alpha_vantage, yfinance, akshare
+        "news_data": "yfinance",                 # Options: alpha_vantage, yfinance, akshare
     },
     # Tool-level configuration (takes precedence over category-level)
     # Can be comma-separated for fallback priority, e.g. "akshare, yfinance, alpha_vantage"
