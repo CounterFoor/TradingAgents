@@ -175,38 +175,47 @@ def get_fundamentals(ticker: str, curr_date: str = None) -> str:
 
 
 def get_balance_sheet(ticker: str, freq: str = "quarterly", curr_date: str = None):
-    """Get balance sheet via AKShare (East Money)."""
+    """Get balance sheet via AKShare."""
     clean = ticker.split(".")[0]
     if not _is_ashare(clean):
         raise AKShareUnsupportedError(f"AKShare only supports A-share stocks, got {ticker}")
     try:
         df = ak.stock_balance_sheet_by_report_em(symbol=clean)
-    except Exception as e:
-        raise RuntimeError(f"AKShare balance sheet failed for {ticker}: {e}") from e
+    except Exception:
+        try:
+            df = ak.stock_financial_debt_new_ths(symbol=clean)
+        except Exception as e2:
+            raise RuntimeError(f"AKShare balance sheet failed for {ticker}: {e2}") from e2
     return df.to_csv(index=False)
 
 
 def get_cashflow(ticker: str, freq: str = "quarterly", curr_date: str = None):
-    """Get cash flow statement via AKShare (East Money)."""
+    """Get cash flow statement via AKShare."""
     clean = ticker.split(".")[0]
     if not _is_ashare(clean):
         raise AKShareUnsupportedError(f"AKShare only supports A-share stocks, got {ticker}")
     try:
-        df = ak.stock_cash_flow_by_report_em(symbol=clean)
-    except Exception as e:
-        raise RuntimeError(f"AKShare cash flow failed for {ticker}: {e}") from e
+        df = ak.stock_cash_flow_sheet_by_report_em(symbol=clean)
+    except Exception:
+        try:
+            df = ak.stock_financial_cash_new_ths(symbol=clean)
+        except Exception as e2:
+            raise RuntimeError(f"AKShare cash flow failed for {ticker}: {e2}") from e2
     return df.to_csv(index=False)
 
 
 def get_income_statement(ticker: str, freq: str = "quarterly", curr_date: str = None):
-    """Get income statement via AKShare (East Money)."""
+    """Get income statement via AKShare."""
     clean = ticker.split(".")[0]
     if not _is_ashare(clean):
         raise AKShareUnsupportedError(f"AKShare only supports A-share stocks, got {ticker}")
     try:
         df = ak.stock_profit_sheet_by_report_em(symbol=clean)
-    except Exception as e:
-        raise RuntimeError(f"AKShare income statement failed for {ticker}: {e}") from e
+    except Exception:
+        try:
+            df = ak.stock_financial_benefit_new_ths(symbol=clean)
+        except Exception as e2:
+            raise RuntimeError(f"AKShare income statement failed for {ticker}: {e2}") from e2
     return df.to_csv(index=False)
 
 
