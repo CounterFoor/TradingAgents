@@ -33,6 +33,9 @@ from cli.utils import *
 from cli.announcements import fetch_announcements, display_announcements
 from cli.stats_handler import StatsCallbackHandler
 
+from dotenv import load_dotenv
+load_dotenv()
+
 console = Console()
 
 app = typer.Typer(

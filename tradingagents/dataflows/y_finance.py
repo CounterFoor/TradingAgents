@@ -95,6 +95,24 @@ def get_stock_stats_indicators_window(
             "Usage: Apply 70/30 thresholds and watch for divergence to signal reversals. "
             "Tips: In strong trends, RSI may remain extreme; always cross-check with trend analysis."
         ),
+        "mfi": (
+            "MFI: The Money Flow Index is a momentum indicator that uses both price and volume to measure buying and selling pressure. "
+            "Usage: Identify overbought (>80) or oversold (<20) conditions and confirm the strength of trends or reversals. "
+            "Tips: Use alongside RSI or MACD to confirm signals; divergence between price and MFI can indicate potential reversals."
+        ),
+        # KDJ (Stochastic)
+        "kdjk": (
+            "KDJ-K: Fast stochastic line. "
+            "Usage: Reacts quickly to price changes; K/D crossovers signal entry/exit points."
+        ),
+        "kdjd": (
+            "KDJ-D: Slow stochastic line. "
+            "Usage: Smoothed signal line; use K crossing above D as buy signal, below D as sell."
+        ),
+        "kdjj": (
+            "KDJ-J: Divergence sensing line (J=3K-2D). "
+            "Usage: Extreme values (>100 or <0) signal potential reversals."
+        ),
         # Volatility Indicators
         "boll": (
             "Bollinger Middle: A 20 SMA serving as the basis for Bollinger Bands. "
@@ -116,16 +134,25 @@ def get_stock_stats_indicators_window(
             "Usage: Set stop-loss levels and adjust position sizes based on current market volatility. "
             "Tips: It's a reactive measure, so use it as part of a broader risk management strategy."
         ),
+        # Trend Strength
+        "adx": (
+            "ADX: Average Directional Index. "
+            "Usage: Measures trend strength regardless of direction. "
+            "Tips: Above 25 = strong trend, below 20 = weak/range-bound market."
+        ),
+        "dx": (
+            "DX: Directional Movement Index. "
+            "Usage: Raw trend strength before ADX smoothing; values above 25 indicate trending conditions."
+        ),
+        "adxr": (
+            "ADXR: ADX Rating. "
+            "Usage: Average of current ADX and ADX from N periods ago; smooths ADX further."
+        ),
         # Volume-Based Indicators
         "vwma": (
             "VWMA: A moving average weighted by volume. "
             "Usage: Confirm trends by integrating price action with volume data. "
             "Tips: Watch for skewed results from volume spikes; use in combination with other volume analyses."
-        ),
-        "mfi": (
-            "MFI: The Money Flow Index is a momentum indicator that uses both price and volume to measure buying and selling pressure. "
-            "Usage: Identify overbought (>80) or oversold (<20) conditions and confirm the strength of trends or reversals. "
-            "Tips: Use alongside RSI or MACD to confirm signals; divergence between price and MFI can indicate potential reversals."
         ),
     }
 
